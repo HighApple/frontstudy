@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        /*
+        DOM
+        1. Document Object Model(문서 객체 모델)
+        2. HTML, XML 문서의 프로그래밍 인터페이스이다.
+        3. 프로그래밍 언어를 이용해서 DOM 구조(태그)에 접근한 뒤, 스타일, 내용을 변경할 수 있다.
+        4. 종류
+          1) var 변수 = document.getElementById(아이디)             -- 결과가 변수
+          2) var 배열 = document.getElementByClassName(클래스)      -- 결과가 배열
+          3) var 배열 = document.getElementByTagName('태그이름')
+          4) var 변수 = document.querySelector(선택자)
+          5) var 배열 = document.querySelectorAll(선택자)
+        */
+    </script>
+
+    <script>
+        /*
+        DOM 주의사항
+        DOM 구조(태그)를 상단에 배치하고, <script> 태그를 하단에 배치한다.
+            +그래서 body 태그 직전에 script 태그가 몰려있는 경우가 많다.
+        */
+    </script>
+
+    <div class="wrap">
+    <div class="wrap">
+        <div id="box1" class="primary-box">box1</div>
+        <div id="box2" class="primary-box">box2</div>
+    </div>
+    <script>
+        console.log(document.getElementById('box1'));
+        console.log(document.getElementsByClassName('primary-box'));
+        console.log(document.getElementsByTagName('div'));
+        console.log(document.querySelector('.wrap > #box1'));
+        console.log(document.querySelectorAll('.wrap > .primary-box'));
+    </script>
+
+    <div id="div1"><strong>안녕하세요</strong></div>
+    <script>
+        /*DOM 구조 내부 텍스트*/
+        console.log(document.getElementById('div1').textContent);
+        document.getElementById('div1').textContent = '<em>안녕하다</em>';
+        document.getElementById('div1').textContent += '<mark>반갑다</mark>';
+    </script>
+
+    <div id="div2"><strong>안녕하세요</strong></div>
+    <script>
+    /* DOM 구조 내부 요소 */
+    console.log(document.getElementById('div2').innerHTML);                       // 아하 태그도 가지고 있구나. 알수 있읍니다...textContent는 문자만 가지고 왔지만 innerHtml은 태그까지 가지고옴
+    document.getElementById('div2').innerHTML = '<em>안녕하다.</em>';             // 기울임이 반영된다. (textcontent는 tag도 그냥 글자로 출력됨)
+    document.getElementById('div2').innerHTML += '<mark>반갑다</mark>';
+    </script>
+
+    <div id="div3"><img src="../assets/image/animal10.jpg" width="100px" height="100px"></div>
+    <script>
+        /* **중요
+        태그에 작성된 속성(attribute)
+        1. 가져오기
+          getAttribute(속성)
+        2. 수정하기
+          setAttribute(속성, 값)
+        3. 삭제하기
+          removeAttribute(속성)
+        */
+
+        console.log(document.querySelector('#div3 > img').getAttribute('src'));
+        document.querySelector('#div3 > img').setAttribute('src', '../assets/image/flower1.jpg');
+        document.querySelector('#div3 > img').removeAttribute('width');
+
+        console.log(document.querySelector('#div > img').getAttribute('alt'));
+
+         //attribute(태그속성) 와 property(객체속성) 는 다르다! 하지만 아예 상관없는 것도 아니다! 이해를 잘 해야합니다...
+    //객체 일 때 가지고 있는 속성 property, 태그로 존재할 때 가지고 있는 속성 attribute는 다름.
+    //태그를 document로 가지고 와서 객체가 됐을때, property의 함수는 아주 많아짐. 반면 attribute는 함수는 3개.
+    //태그를 객체로 가져왔을 때는 더이상 attribute가 아니라는 걸 알아야 함. 쓰는 함수가 아예 다름
+    </script>
+
+<div id="div4">
+    <input type="radio" name="gender" value="man" class="blind" id="man" checked="checked">
+    <label for="man">남자</label>
+    <input type="radio" name="gender" value="woman" class="blind" id="woman">
+    <label for="woman">여자</label>
+  </div>
+  
+  <style>
+    #div4 > .blind {
+      display: none;              /*display:none 처리로 인해 보이지는 않지만 lable 처리를 했기때문에 남자를 누르면 남자, 여자를 누르면 여자가 체크됨. 눈으로만 안보임*/
+    }
+    #div4 > label {
+      display: inline-block;
+      width: 100px;
+      height: 50px;
+      text-align: center;
+      line-height: 50px;              /*height 와 line-height 크기를 맞추면 세로 정렬 효과를 줄 수 있었죠*/
+      background-color: beige;
+      cursor: pointer;
+    }
+    #div4 > input:checked + label {
+      background-color: bisque;
+    }
+  </style>
+
+<script>
+    /*
+      문서 객체 속성(property)
+      1. JavaScript 객체 속성을 의미한다.
+      2. 태그에 작성된 속성(attribute)과 대부분 같지만 다른 것들도 있다. (아래는 대표적으로 바뀌는 것들..class와 checked)
+                                    attribute                  property
+       ----------------------------------------------------------------------------------                              
+        id="man"                  id="man"                    id='man'
+        class="blind"             class="blind"               className: 'blind'
+        checked="checked"         checked="checked"           checked: true
+      3. 객체 속성 접근 방식
+        1) 객체.속성                     --- 보통 이렇게 씀. 아래 방법은 그때 문자열 못쓰는 for문이나, css 변환 등 써야할 이유가 있을때 주로 쓰는 방법
+        2) 객체['속성']
+    */
+
+   //checked= "checked" 속성바꾸기(속성이름 모르곘으면 elements-properties 가서 계속 확인해주기~ )
+
+   //1) 문서 객체 속성(property) 이용하기
+   document.getElementById('man').checked = false;
+   document.getElementById('woman').checked = true;
+
+   //2) 태그 속성(attribute) 이용하기 
+   document.getElementById('man').removeAttribute('checked');       //attribute로 할때는 조금씩 달라진다는 거 유의! attribute는 checked 니까.
+   document.getElementById('woman').setAttribute('checked', 'checked');    //이렇게! attribute는 true false 가 아니라 'checked'. 방식에 따라 코드가 달라진다. 뭐가 답이다! 이게 아니라 attri 냐 prop냐에 따라 갈린다는거...
+
+   
+    //class="blind" 속성 없애기
+   var blind = document.getElementsByClassName('blind');
+   while(blind.length > 0){
+     blind[i].classList.remove('blind');
+   };
+   // 참조변수라는게...삭제할 때 이런저런 문제가 많이 생기기도 하고..생각해볼게 많아요...
+  </script>
+
+  <div id="div5">마무리합니다</div>
+  <script>
+    /*
+      style 속성(poperty)
+      1. CSS 처리하는 속성이다.
+      2. inline 방식의 CSS 처리가 된다. (=우선순위가 높음! -> JavaScript로 sytle 속성을 주면 기존 CSS는 덮어쓰기가 된다.)
+      3. style 속성 작성 방법
+        1) 객체.style.backgroundColor
+        2) 객체.style.['background-color']
+    */
+
+    document.getElementById('div5').style.fontSize = '32px';
+    document.getElementById('div5').style['background-color'] = 'yellow';
+    
+
+  </script>
+  
+
+</body>
+</html>
